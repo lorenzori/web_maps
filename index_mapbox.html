@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>a mapbox map!</title>
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+	<style type="text/css">
+		/**
+		* Create a position for the map
+		* on the page */
+		#map {
+		  position: absolute;
+		  top: 0;
+		  bottom: 0;
+		  width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id='map'></div>
+	<script type="text/javascript">
+		mapboxgl.accessToken = 'pk.eyJ1IjoibG9yaWNoZXMiLCJhIjoiY2o5bng3enEwNHFtczMwdDR6b2U1cWRyOSJ9.6nLIcDOs_YTMEiT4IvBjDQ';
+
+		var map = new mapboxgl.Map({
+		  container: 'map', // container id
+		  style: 'mapbox://styles/mapbox/light-v9',
+		  center: [12.485085, 41.885995],
+		  zoom: 10
+		});
+
+		map.on('load', function () {
+			
+			map.addSource('mydata', {
+			  type: 'geojson',
+			  data: 'http://localhost:5000/data'
+			});
+
+			map.addLayer({
+		        "id": "boundary",
+		        "type": "fill",
+		        "source": "mydata",
+		        "paint": {
+		            "fill-color": "#ee3647",
+		            "fill-opacity": 0.4
+		        },
+    });
+
+		});
+	</script>
+
+</body>
+</html>

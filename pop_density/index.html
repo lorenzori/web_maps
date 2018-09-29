@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+
+	<!-- CSS -->
+	<link href="default.css" rel="stylesheet" type="text/css">
+</head>
+
+<head>
+	<div id='map'></div>
+	<div class='map-overlay' id='features'><h2>WorldPop Population Density</h2><div id='pd'><p>Hover over a state!</p></div></div>
+	<div class='map-overlay' id='legend'></div>
+
+</head>
+
+<body>
+	<script type="text/javascript">
+	
+	mapboxgl.accessToken = 'pk.eyJ1IjoibG9yaWNoZXMiLCJhIjoiY2o5bng3enEwNHFtczMwdDR6b2U1cWRyOSJ9.6nLIcDOs_YTMEiT4IvBjDQ';
+
+	//globals for the choropleth https://bl.ocks.org/hrecht/82b6440ed3b982a6f594
+    var COLORS = ['#8c510a', '#d8b365', '#f6e8c3', '#c7eae5', '#5ab4ac', '#01665e'],
+        BREAKS = [0, 100, 1000, 10000, 100000, 1000000],
+        FILTERUSE;
+
+	var map = new mapboxgl.Map({
+	  container: 'map', // container id
+	  style: 'mapbox://styles/loriches/cjcbs8fn8024t2rlqpcin80xg' // replace this with your style URL
+	});
+
+	map.on('load', function () {
+   		map.addSource("data", {
+        "type": "geojson",
+        "data": 'http://localhost:5000/data'
+    	});
+    	map.addLayer({
+        "id": "boundary",
+        "type": "fill",
+        "source": "data",
+        "paint": {
+        	"fill-color": {
+        		property: 'sum',
+        		stops: [
+                    [BREAKS[0], COLORS[0]],
+                    [BREAKS[1], COLORS[1]],
+                    [BREAKS[2], COLORS[2]],
+                    [BREAKS[3], COLORS[3]],
+                    [BREAKS[4], COLORS[4]],
+                    [BREAKS[5], COLORS[5]]]
+             },
+            "fill-outline-color": "#888888",
+            "fill-opacity": 0.4
+        },
+        "filter": ["==", "$type", "Polygon"]
+    });
+
+});
+	 </script>
+
+</body>
+</html>

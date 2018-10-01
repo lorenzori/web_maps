@@ -6,11 +6,9 @@
 
 	<!-- CSS -->
 	<link href="default.css" rel="stylesheet" type="text/css">
-</head>
-
-<head>
 	<div id='map'></div>
-	<div class='map-overlay' id='features'><h2>WorldPop Population Density</h2><div id='pd'><p>Hover over a state!</p></div></div>
+	<div class='map-overlay' id='features'><h2>WorldPop Population Density</h2><div id='pd'>
+    <p>Hover over a state!</p></div></div>
 	<div class='map-overlay' id='legend'></div>
 
 </head>
@@ -20,17 +18,35 @@
 	
 	mapboxgl.accessToken = 'pk.eyJ1IjoibG9yaWNoZXMiLCJhIjoiY2o5bng3enEwNHFtczMwdDR6b2U1cWRyOSJ9.6nLIcDOs_YTMEiT4IvBjDQ';
 
-	//globals for the choropleth https://bl.ocks.org/hrecht/82b6440ed3b982a6f594
-    var COLORS = ['#8c510a', '#d8b365', '#f6e8c3', '#c7eae5', '#5ab4ac', '#01665e'],
-        BREAKS = [0, 100, 1000, 10000, 100000, 1000000],
-        FILTERUSE;
-
 	var map = new mapboxgl.Map({
 	  container: 'map', // container id
 	  style: 'mapbox://styles/loriches/cjcbs8fn8024t2rlqpcin80xg' // replace this with your style URL
 	});
 
 	map.on('load', function () {
+
+        //globals for the choropleth https://bl.ocks.org/hrecht/82b6440ed3b982a6f594
+        var COLORS = ['#8c510a', '#d8b365', '#f6e8c3', '#c7eae5', '#5ab4ac', '#01665e'],
+        BREAKS = [0, 1000, 10000, 100000, 1000000, 10000000],
+        FILTERUSE;
+
+        // legend
+        for (i = 0; i < BREAKS.length; i++) {
+          var layer = BREAKS[i];
+          var color = COLORS[i];
+          var item = document.createElement('div');
+          var key = document.createElement('span');
+          key.className = 'legend-key';
+          key.style.backgroundColor = color;
+
+          var value = document.createElement('span');
+          value.innerHTML = layer;
+          item.appendChild(key);
+          item.appendChild(value);
+          legend.appendChild(item);
+        }
+
+        // data
    		map.addSource("data", {
         "type": "geojson",
         "data": 'http://localhost:5000/data'
@@ -52,9 +68,22 @@
              },
             "fill-outline-color": "#888888",
             "fill-opacity": 0.4
-        },
+            },
         "filter": ["==", "$type", "Polygon"]
-    });
+        });
+
+        // tooltip
+        map.on('mousemove', function(e) {
+          var states = map.queryRenderedFeatures(e.point, {
+            layers: ['boundary']
+          });
+
+          if (states.length > 0) {
+            document.getElementById('pd').innerHTML = '<h3><strong>' + states[0].properties.name + '</strong></h3><p><strong><em>' + states[0].properties.sum + '</strong> people </em></p>';
+          } else {
+            document.getElementById('pd').innerHTML = '<p>Hover over a state!</p>';
+          }
+        });
 
 });
 	 </script>

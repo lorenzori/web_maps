@@ -20,14 +20,16 @@
 
 	var map = new mapboxgl.Map({
 	  container: 'map', // container id
-	  style: 'mapbox://styles/loriches/cjcbs8fn8024t2rlqpcin80xg' // replace this with your style URL
+	  style: 'mapbox://styles/loriches/cjcbs8fn8024t2rlqpcin80xg', // replace this with your style URL
+      center: [3.687646, 22.829351], 
+      zoom: 2
 	});
 
 	map.on('load', function () {
 
         //globals for the choropleth https://bl.ocks.org/hrecht/82b6440ed3b982a6f594
         var COLORS = ['#8c510a', '#d8b365', '#f6e8c3', '#c7eae5', '#5ab4ac', '#01665e'],
-        BREAKS = [0, 1000, 10000, 100000, 1000000, 10000000],
+        BREAKS = [0, 10000, 100000, 1000000, 5000000, 10000000],
         FILTERUSE;
 
         // legend

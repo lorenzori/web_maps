@@ -5,7 +5,6 @@ API exposes the geoJson with populaiton density by admin area.
 
 from flask import Flask, Response
 from flask_restful import Api, Resource
-import geopandas as gpd
 from rasterstats import zonal_stats
 import json
 
@@ -19,7 +18,7 @@ api = Api(app)
 
 
 # summarize the pop density raster within vector layer
-stats = zonal_stats(GEOMETRY_FILE, WORLDPOP_RASTER, stats=['sum'], geojson_out=True)
+stats = zonal_stats(GEOMETRY_FILE, WORLDPOP_RASTER, stats=['sum', 'mean'], geojson_out=True)
 pop_by_adm = {"type": "FeatureCollection","features": stats}
 
 

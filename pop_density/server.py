@@ -25,11 +25,8 @@ pop_by_adm = {"type": "FeatureCollection","features": stats}
 class return_data(Resource):
     def get(self):
 
-        t = json.dumps(pop_by_adm)
-
-        print(t)
         return Response(
-            response=t,
+            response=json.dumps(pop_by_adm),
             mimetype='application/json',
             status=200)
 
@@ -40,7 +37,7 @@ api.add_resource(return_data, '/data')
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  response.headers.add('Access-Control-Allow-Methods', 'GET')
   return response
 
 

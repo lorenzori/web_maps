@@ -7,22 +7,26 @@ from flask import Flask, Response
 from flask_restful import Api, Resource
 from rasterstats import zonal_stats
 import json
+import requests
 
-# global variables
-GEOMETRY_FILE = "geometry.geojson"
-WORLDPOP_RASTER = "AFR_PPP_2020_adj_v2.tif"
-
-
+# get the data from the bucket
+print('getting data from Bucket ...')
+r = requests.get('https://population-density-data.ams3.digitaloceanspaces.com/AFR_PPP_2020_adj_v2.tif')
+open('tmp_satser.tif', 'wb').write(r.content)
+r = requests.get('https://population-density-data.ams3.digitaloceanspaces.com/geometry.geojson')
+open('geometry.geojson', 'wb').write(r.content)
+print('downloaded.')
 app = Flask(__name__)
 api = Api(app)
 
 
 # summarize the pop density raster within vector layer
-stats = zonal_stats(GEOMETRY_FILE, WORLDPOP_RASTER, stats=['sum', 'mean'], geojson_out=True)
+print('calculating values per admin ...')
+stats = zonal_stats('geometry.geojson', 'tmp_satser.tif', stats=['sum', 'mean'], geojson_out=True)
 pop_by_adm = {"type": "FeatureCollection","features": stats}
 
 
-class return_data(Resource):
+class ReturnData(Resource):
     def get(self):
 
         return Response(
@@ -30,7 +34,7 @@ class return_data(Resource):
             mimetype='application/json',
             status=200)
 
-api.add_resource(return_data, '/data')
+api.add_resource(ReturnData, '/data')
 
 
 @app.after_request

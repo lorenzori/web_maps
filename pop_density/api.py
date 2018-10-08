@@ -34,6 +34,7 @@ class ReturnData(Resource):
             mimetype='application/json',
             status=200)
 
+
 api.add_resource(ReturnData, '/data')
 
 

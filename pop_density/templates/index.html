@@ -19,11 +19,18 @@
 	
 	mapboxgl.accessToken = 'pk.eyJ1IjoibG9yaWNoZXMiLCJhIjoiY2o5bng3enEwNHFtczMwdDR6b2U1cWRyOSJ9.6nLIcDOs_YTMEiT4IvBjDQ';
 
+    // Set bounds to Africa
+    var bounds = [
+        [-42.322110, -37.119575], // Southwest coordinates
+        [36.536829, 62.075966]  // Northeast coordinates
+    ];
+
 	var map = new mapboxgl.Map({
 	  container: 'map', // container id
 	  style: 'mapbox://styles/loriches/cjcbs8fn8024t2rlqpcin80xg', // replace this with your style URL
       center: [3.687646, 22.829351], 
-      zoom: 2
+      zoom: 2,
+      maxBounds: bounds
 	});
 
 	map.on('load', function () {

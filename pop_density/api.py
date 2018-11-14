@@ -3,7 +3,7 @@
 API exposes the geoJson with populaiton density by admin area.
 """
 
-from flask import Flask, Response
+from flask import Flask, Response, render_template
 from flask_restful import Api, Resource
 from rasterstats import zonal_stats
 import json
@@ -25,17 +25,25 @@ print('calculating values per admin ...')
 stats = zonal_stats('geometry.geojson', 'tmp_satser.tif', stats=['sum', 'mean'], geojson_out=True)
 pop_by_adm = {"type": "FeatureCollection","features": stats}
 
+with open('pop_admin.geojson', 'w') as f:
+    json.dump(pop_by_adm, f)
 
-class ReturnData(Resource):
-    def get(self):
+@app.route('/data', methods=['GET'])
+def return_data():
+  return json.dumps(pop_by_adm)
+#class ReturnData(Resource):
+#    def get(self):
 
-        return Response(
-            response=json.dumps(pop_by_adm),
-            mimetype='application/json',
-            status=200)
+#        return Response(
+#            response=json.dumps(pop_by_adm),
+#            mimetype='application/json',
+#            status=200)
 
+@app.route('/')
+def home():
+  return render_template('index.html')
 
-api.add_resource(ReturnData, '/data')
+#api.add_resource(ReturnData, '/data')
 
 
 @app.after_request

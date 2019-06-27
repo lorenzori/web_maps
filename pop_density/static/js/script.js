@@ -1,4 +1,4 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoibG9yaWNoZXMiLCJhIjoiY2o5bng3enEwNHFtczMwdDR6b2U1cWRyOSJ9.6nLIcDOs_YTMEiT4IvBjDQ';
+mapboxgl.accessToken = '';
 
     // Set bounds to Africa
     var bounds = [

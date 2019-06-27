@@ -12,6 +12,7 @@ import requests
 # get the data from the bucket
 print('getting data from Bucket ...')
 r = requests.get('https://population-density-data.ams3.digitaloceanspaces.com/AFR_PPP_2020_adj_v2.tif')
+r = requests.get('ftp://ftp.worldpop.org.uk/GIS/Population/Whole_Continent/Asia_1km_Population.7z')
 open('tmp_satser.tif', 'wb').write(r.content)
 r = requests.get('https://population-density-data.ams3.digitaloceanspaces.com/geometry.geojson')
 open('geometry.geojson', 'wb').write(r.content)

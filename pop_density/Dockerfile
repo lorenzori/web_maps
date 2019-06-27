@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ENTRYPOINT ["python"]
-CMD ["api.py"]
+CMD ["flask_api.py"]
